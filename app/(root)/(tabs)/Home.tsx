@@ -19,7 +19,7 @@ import Map from "@/components/Map";
 import { useLocationStore } from "@/store";
 import { useFetch } from "@/lib/fetch";
 
-export default function Page() {
+export default function Home() {
   const { setUserLocation, setDestinationLocation } = useLocationStore();
   const { signOut } = useAuth();
   const { user } = useUser();
@@ -29,7 +29,6 @@ export default function Page() {
 
   function handleSignOut() {
     signOut();
-
     router.replace("/(auth)/Sign-in");
   }
 
@@ -43,39 +42,35 @@ export default function Page() {
     router.push("/(root)/Find-ride");
   }
 
-  useEffect(
-    function () {
-      const requestLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setHasPermission(false);
+        return;
+      }
 
-        if (status === "granted") {
-          setHasPermission(false);
-          return;
-        }
+      let location = await Location.getCurrentPositionAsync({});
 
-        let location = await Location.getCurrentPositionAsync();
+      const address = await Location.reverseGeocodeAsync({
+        latitude: location.coords?.latitude!,
+        longitude: location.coords?.longitude!,
+      });
 
-        const address = await Location.reverseGeocodeAsync({
-          latitude: location.coords?.latitude!,
-          longitude: location.coords?.longitude!,
-        });
-
-        setUserLocation({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          address: `${address[0].name}, ${address[0].region}`,
-        });
-      };
-      requestLocation();
-    },
-    [setUserLocation]
-  );
+      setUserLocation({
+        latitude: location.coords?.latitude,
+        longitude: location.coords?.longitude,
+        address: `${address[0].name}, ${address[0].region}`,
+      });
+    })();
+  }, [setUserLocation]);
 
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
         data={recentRides?.slice(0, 5)}
         renderItem={({ item }) => <RideCard ride={item} />}
+        keyExtractor={(_, index) => index.toString()}
         className="px-5"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
@@ -98,7 +93,7 @@ export default function Page() {
             )}
           </View>
         )}
-        ListHeaderComponent={() => (
+        ListHeaderComponent={
           <>
             <View className="flex flex-row items-center justify-between my-5">
               <Text className="text-2xl capitalize font-JakartaExtraBold">
@@ -133,7 +128,7 @@ export default function Page() {
               Recent Rides
             </Text>
           </>
-        )}
+        }
       />
     </SafeAreaView>
   );

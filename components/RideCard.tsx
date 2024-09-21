@@ -49,7 +49,10 @@ export default function RideCard({
             <Text className="text-md font-JakartaMedium text-gray-500">
               Date & Time
             </Text>
-            <Text className="text-md font-JakartaMedium text-gray-500">
+            <Text
+              className="text-md font-JakartaMedium text-gray-500"
+              numberOfLines={1}
+            >
               {formatDate(created_at)} {formatTime(ride_time)}
             </Text>
           </View>

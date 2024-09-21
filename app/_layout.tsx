@@ -4,8 +4,8 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import "react-native-reanimated";
 import { LogBox } from "react-native";
-
 import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
+
 import { tokenCache } from "@/lib/auth";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;

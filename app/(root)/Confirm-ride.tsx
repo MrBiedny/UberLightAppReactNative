@@ -13,6 +13,7 @@ export default function ConfirmRide() {
     <RideLayout title="Choose a driver" snapPoints={["65%", "85%"]}>
       <FlatList
         data={drivers}
+        keyExtractor={(_, idnex) => idnex.toString()}
         renderItem={({ item }) => (
           <DriverCard
             selected={selectedDriver!}

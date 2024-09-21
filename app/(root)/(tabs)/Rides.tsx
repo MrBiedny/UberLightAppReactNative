@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useUser } from "@clerk/clerk-expo";
 import { useFetch } from "@/lib/fetch";
 import { Ride } from "@/types/type";
+import { images } from "@/constants";
 
 export default function Rides() {
   const { user } = useUser();
@@ -13,7 +14,7 @@ export default function Rides() {
   );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1 bg-white">
       <FlatList
         data={recentRides}
         renderItem={({ item }) => <RideCard ride={item} />}

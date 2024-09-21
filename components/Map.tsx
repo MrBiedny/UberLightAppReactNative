@@ -25,13 +25,6 @@ export default function Map() {
   const { selectedDriver, setDrivers } = userDriverStore();
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
-  const region = calculateRegion({
-    userLongitude,
-    userLatitude,
-    destinationLongitude,
-    destinationLatitude,
-  });
-
   useEffect(
     function () {
       if (Array.isArray(drivers)) {
@@ -72,6 +65,13 @@ export default function Map() {
     ]
   );
 
+  const region = calculateRegion({
+    userLongitude,
+    userLatitude,
+    destinationLongitude,
+    destinationLatitude,
+  });
+
   if (loading || !userLatitude || !userLongitude) {
     return (
       <View className="flex justify-between items-center w-full">
@@ -108,7 +108,7 @@ export default function Map() {
           }}
           title={marker.title}
           image={
-            selectedDriver === marker.id ? icons.selectedMarker : icons.marker
+            selectedDriver === +marker.id ? icons.selectedMarker : icons.marker
           }
         />
       ))}
